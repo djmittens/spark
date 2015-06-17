@@ -14,7 +14,6 @@ package me.ngrid.math;
 
 public class PostfixCalculator implements Calculator {
 
-    private void build() {}
 
     @Override
     public double evaluate(String expr) {
