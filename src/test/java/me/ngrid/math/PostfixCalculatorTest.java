@@ -1,7 +1,5 @@
 package me.ngrid.math;
 
-import me.ngrid.math.Calculator;
-import me.ngrid.math.PostfixCalculator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +45,8 @@ public class PostfixCalculatorTest {
 
     @Test
     public void testOperatorPrecedence () throws Exception {
-        assertEquals(8d, calculator.evaluate("2 + 2 * 2"), 0.000_001d);
+        assertEquals(6d, calculator.evaluate("2 + 2 * 2"), 0.000_001d);
         assertEquals(9d, calculator.evaluate("3 % 4 + 2 + 2 * 2"), 0.000_001d);
+        assertEquals(7.7832775367d, calculator.evaluate("3 % 4 + 8.0129292 / 10.23 + 2 * 2"), 0.000_001d);
     }
 }

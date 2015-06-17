@@ -20,9 +20,30 @@ public class PostfixCalculator implements Calculator {
 
     @Override
     public double evaluate(String expr) {
+        expr = expr.replaceAll(" ", "");
         Queue<Object> postfix = getPostfixNotation(expr.toCharArray());
+
+        // Answer stack.
+        Deque<Double> buf = new ArrayDeque<>();
+        Object tmp;
         // now that we have postfix notation evaluate !;
-        return Double.NaN;
+        while(!postfix.isEmpty()) {
+            tmp = postfix.poll();
+
+            if(tmp instanceof Double) {
+                buf.push((Double)tmp);
+            }
+
+            else if(tmp instanceof BinaryOperator) {
+                Double op2 = buf.pop();
+                Double op1 = buf.pop();
+
+                buf.push(((BinaryOperator) tmp).apply(op1, op2));
+            }
+        }
+        // We have to have the answer as last.
+        assert(buf.size() == 1);
+        return buf.pop();
     }
 
     /**
@@ -74,6 +95,7 @@ public class PostfixCalculator implements Calculator {
                     }
                 }
 
+                // Push it onto the stack.
                 opStack.push(op);
             }
         }
