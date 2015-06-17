@@ -31,6 +31,8 @@ interface BinaryOperator {
                 return new Modulo();
             case('*'):
                 return new Multiply();
+            case('/'):
+                return new Divide();
             case('+'):
                 return new Plus();
             case('-'):
@@ -51,6 +53,11 @@ interface BinaryOperator {
         public double apply(double left, double right) {
             return left * right;
         }
+
+        @Override
+        public String toString() {
+            return "*";
+        }
     }
 
     class Divide implements BinaryOperator {
@@ -63,6 +70,11 @@ interface BinaryOperator {
         @Override
         public double apply(double left, double right) {
             return left / right;
+        }
+
+        @Override
+        public String toString() {
+            return "/";
         }
     }
 
@@ -77,6 +89,11 @@ interface BinaryOperator {
         public double apply(double left, double right) {
             return left % right;
         }
+
+        @Override
+        public String toString() {
+            return "%";
+        }
     }
 
     class Minus implements BinaryOperator {
@@ -90,6 +107,11 @@ interface BinaryOperator {
         public double apply(double left, double right) {
             return left - right;
         }
+
+        @Override
+        public String toString() {
+            return "-";
+        }
     }
 
     class Plus implements BinaryOperator {
@@ -102,6 +124,11 @@ interface BinaryOperator {
         @Override
         public double apply(double left, double right) {
             return left + right;
+        }
+
+        @Override
+        public String toString() {
+            return "+";
         }
     }
 }

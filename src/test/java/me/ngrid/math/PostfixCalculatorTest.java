@@ -5,6 +5,8 @@ import me.ngrid.math.PostfixCalculator;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 /**
@@ -17,6 +19,24 @@ public class PostfixCalculatorTest {
     public void setUp() {
         calculator = PostfixCalculator.getInstance();
     }
+
+    /**
+     * A Fixture for testing a postfix expression
+     */
+    private String postfixFixture(String expr){
+        return Arrays.toString(
+                PostfixCalculator.getPostfixNotation(expr.toCharArray())
+                        .toArray());
+    }
+
+    @Test
+    public void testPostfixNotation() {
+        assertEquals("[1.0, 2.0, +, 3.0, +]", postfixFixture("1+2+3"));
+        assertEquals("[1.0, 2.0, 3.0, *, +, 4.0, -, 100.2, 10.0, %, 44.3, /, +]",
+                postfixFixture("1+2*3-4+100.2%10/44.3"));
+        assertEquals("[1.0, 2.0, 3.0, *, 4.0, %, +]", postfixFixture("1+2*3%4"));
+    }
+
     @Test
     public void test2plus2 () throws Exception  {
         assertEquals("Algorithm cant add 2+2 lame...",

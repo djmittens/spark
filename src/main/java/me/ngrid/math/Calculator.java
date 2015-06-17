@@ -8,7 +8,7 @@ public interface Calculator {
      *
      * @param expr a mathematical expression.
      *             valid inputs include operators (+, -, *, %, /, ^) and follow operator precedence
-     * @return
+     * @return the result.
      */
     double evaluate(String expr);
 }

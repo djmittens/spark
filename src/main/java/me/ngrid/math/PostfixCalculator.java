@@ -1,5 +1,9 @@
 package me.ngrid.math;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Queue;
+
 /**
  * A calculator can evaluate an expression represented as a {@code String}.
  * This particular implementation uses Shunting - Yard algorithm to build postfix notation(Reverse Polish)
@@ -14,10 +18,75 @@ package me.ngrid.math;
 
 public class PostfixCalculator implements Calculator {
 
-
     @Override
     public double evaluate(String expr) {
+        Queue<Object> postfix = getPostfixNotation(expr.toCharArray());
+        // now that we have postfix notation evaluate !;
         return Double.NaN;
+    }
+
+    /**
+     * Builds the postfix notation for the given character array.
+     * @param expr character array for the expression
+     * @return postfix notation Queue.
+     */
+    static Queue<Object> getPostfixNotation(char[] expr) {
+        // Operator stack.
+        Deque<BinaryOperator> opStack = new ArrayDeque<>();
+
+        // Queue -- Reverse Polish Notation
+        Queue<Object> rpn = new ArrayDeque<>();
+
+        // Buffer for number parsing.
+        StringBuilder numBuf = new StringBuilder();
+
+        // Main builder loop.
+        for (char c : expr) {
+            //Start off by checking if its an operator
+            BinaryOperator op = BinaryOperator.getOperator(c);
+
+            // We got an operator!
+            // and we were reading a number so lets queue it up..
+            if(op != null && numBuf.length() > 0) {
+                rpn.add(Double.valueOf(numBuf.toString()));
+                numBuf = new StringBuilder();
+            }
+
+            // We got ourselves a number, lets buffer it
+            if (op == null) {
+                numBuf.append(c);
+            }
+
+            // We got ourselves an operator
+            else {
+                // While the precedence in the stack is large keep adding operators to the output.
+                while(!opStack.isEmpty()) {
+                    BinaryOperator tmp = opStack.peekFirst();
+
+                    // Pop the operator if it is stronger than the one we are trying to push.
+                    if (op.getPrecedence() <= tmp.getPrecedence()) {
+                        rpn.add(opStack.pop());
+                    }
+
+                    // Clearly we are the weakest now, so we are done here.
+                    else {
+                        break;
+                    }
+                }
+
+                opStack.push(op);
+            }
+        }
+
+        // Clear out remaining number inside of number buffer
+        if(numBuf.length() > 0)
+            rpn.add(Double.valueOf(numBuf.toString()));
+
+        while(!opStack.isEmpty()) {
+            rpn.add(opStack.pop());
+        }
+
+        return  rpn;
     }
 
     public static Calculator getInstance() {
